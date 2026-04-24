@@ -4,11 +4,11 @@ const cors = require("cors");
 const pdfParse = require("pdf-parse");
 
 const app = express();
-const upload = multer({ storage: multer.memoryStorage() });
 
+const upload = multer({ storage: multer.memoryStorage() });
 app.use(cors());
 
-// 🔑 API KEY (MUST be set in Render environment variables)
+// 🔑 Groq API key (must be set in Render env vars)
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 // 🌍 Groq endpoint
@@ -28,14 +28,14 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       return res.status(400).json({ error: "Empty PDF text" });
     }
 
-    // 2. DEBUG: check API key exists
+    // 2. Check API key
     if (!GROQ_API_KEY) {
       return res.status(500).json({
-        error: "Missing GROQ_API_KEY in Render environment variables"
+        error: "Missing GROQ_API_KEY in environment variables"
       });
     }
 
-    // 3. Call Groq
+    // 3. Call Groq API
     const response = await fetch(GROQ_URL, {
       method: "POST",
       headers: {
@@ -47,7 +47,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
         messages: [
           {
             role: "system",
-            content: "Turn the text into clean bullet points."
+            content: "Convert text into clear bullet points."
           },
           {
             role: "user",
@@ -58,13 +58,15 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       })
     });
 
-    // 🔥 IMPORTANT: get REAL error
+    // 🔥 UPDATED DEBUG BLOCK (IMPORTANT)
     const rawText = await response.text();
 
     let dataAI;
     try {
       dataAI = JSON.parse(rawText);
     } catch (err) {
+      console.log("GROQ NON-JSON RESPONSE:", rawText);
+
       return res.status(500).json({
         error: "Groq returned non-JSON response",
         raw: rawText
@@ -72,6 +74,8 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
     }
 
     if (!response.ok) {
+      console.log("GROQ ERROR:", dataAI);
+
       return res.status(500).json({
         error: "Groq request failed",
         status: response.status,
@@ -88,7 +92,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       });
     }
 
-    // 4. Convert to bullets
+    // 4. Convert to bullet points
     const bullets = output
       .split("\n")
       .map(line => line.replace(/^[-•*]\s*/, "").trim())
@@ -102,7 +106,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
   }
 });
 
-// 🚀 Render-safe port
+// 🚀 Render-compatible port
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
