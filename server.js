@@ -64,13 +64,17 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
     }
 
     if (!response.ok) {
-      return res.status(500).json({
-        error: "Groq request failed (REAL ERROR BELOW)",
-        status: response.status,
-        details: json
-      });
-    }
+  const errorText = await response.text();
 
+  console.log("❌ GROQ STATUS:", response.status);
+  console.log("❌ GROQ RAW ERROR:", errorText);
+
+  return res.status(500).json({
+    error: "Groq request failed",
+    status: response.status,
+    raw: errorText
+  });
+}
     const output = json?.choices?.[0]?.message?.content;
 
     if (!output) {
