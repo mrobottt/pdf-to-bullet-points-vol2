@@ -4,11 +4,11 @@ const cors = require("cors");
 const pdfParse = require("pdf-parse");
 
 const app = express();
-
 const upload = multer({ storage: multer.memoryStorage() });
+
 app.use(cors());
 
-// 🔑 API KEY (must be set in Render environment variables)
+// 🔑 API KEY (MUST be set in Render environment variables)
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 // 🌍 Groq endpoint
@@ -28,14 +28,14 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       return res.status(400).json({ error: "Empty PDF text" });
     }
 
-    // 2. Check API key (IMPORTANT DEBUG STEP)
+    // 2. DEBUG: check API key exists
     if (!GROQ_API_KEY) {
       return res.status(500).json({
-        error: "Missing GROQ_API_KEY in environment variables"
+        error: "Missing GROQ_API_KEY in Render environment variables"
       });
     }
 
-    // 3. Call Groq API
+    // 3. Call Groq
     const response = await fetch(GROQ_URL, {
       method: "POST",
       headers: {
@@ -47,8 +47,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
         messages: [
           {
             role: "system",
-            content:
-              "Convert the text into short, clear bullet points."
+            content: "Turn the text into clean bullet points."
           },
           {
             role: "user",
@@ -59,9 +58,19 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       })
     });
 
-    const dataAI = await response.json();
+    // 🔥 IMPORTANT: get REAL error
+    const rawText = await response.text();
 
-    // 4. Better error debugging
+    let dataAI;
+    try {
+      dataAI = JSON.parse(rawText);
+    } catch (err) {
+      return res.status(500).json({
+        error: "Groq returned non-JSON response",
+        raw: rawText
+      });
+    }
+
     if (!response.ok) {
       return res.status(500).json({
         error: "Groq request failed",
@@ -74,12 +83,12 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
 
     if (!output) {
       return res.status(500).json({
-        error: "No AI response returned",
+        error: "No AI output returned",
         raw: dataAI
       });
     }
 
-    // 5. Convert to bullet points
+    // 4. Convert to bullets
     const bullets = output
       .split("\n")
       .map(line => line.replace(/^[-•*]\s*/, "").trim())
@@ -93,7 +102,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
   }
 });
 
-// 🚀 Render-compatible listen (ONLY ONE)
+// 🚀 Render-safe port
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
