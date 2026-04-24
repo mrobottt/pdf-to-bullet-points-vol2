@@ -5,13 +5,17 @@ const pdfParse = require("pdf-parse");
 
 const app = express();
 
+// If Render provides fetch, this keeps it safe
+const fetch = global.fetch;
+
 const upload = multer({ storage: multer.memoryStorage() });
+
 app.use(cors());
 
-// 🔑 PUT YOUR GROQ KEY HERE
+// 🔑 Groq API key (set this in Render environment variables)
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
-// 🌍 Stable AI endpoint
+// 🌍 Groq endpoint
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 app.post("/upload", upload.single("pdf"), async (req, res) => {
@@ -28,7 +32,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       return res.status(400).json({ error: "Empty PDF text" });
     }
 
-    // 2. Call Groq AI
+    // 2. Call Groq API
     const response = await fetch(GROQ_URL, {
       method: "POST",
       headers: {
@@ -41,7 +45,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
           {
             role: "system",
             content:
-              "You convert long text into clean bullet points. Keep it short and simple."
+              "You convert long text into clear, short bullet points."
           },
           {
             role: "user",
@@ -67,23 +71,21 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       return res.status(500).json({ error: "No AI response returned" });
     }
 
-    // 3. Convert to bullet points
+    // 3. Convert AI response to bullets
     const bullets = output
       .split("\n")
       .map(line => line.replace(/^[-•*]\s*/, "").trim())
       .filter(Boolean);
 
-    return res.json({ bullets });
+    res.json({ bullets });
 
   } catch (err) {
-    console.error(err);
+    console.error("SERVER ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
-});
+// 🚀 IMPORTANT: ONLY ONE LISTEN (Render compatible)
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
