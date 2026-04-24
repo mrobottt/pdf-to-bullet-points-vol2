@@ -4,14 +4,11 @@ const cors = require("cors");
 const pdfParse = require("pdf-parse");
 
 const app = express();
-
 const upload = multer({ storage: multer.memoryStorage() });
+
 app.use(cors());
 
-// 🔑 Groq API key (must be set in Render env vars)
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
-
-// 🌍 Groq endpoint
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 app.post("/upload", upload.single("pdf"), async (req, res) => {
@@ -20,22 +17,15 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    // 1. Extract PDF text
     const data = await pdfParse(req.file.buffer);
     const text = data.text;
 
-    if (!text || text.trim().length === 0) {
-      return res.status(400).json({ error: "Empty PDF text" });
+    if (!text) {
+      return res.status(400).json({ error: "Empty PDF" });
     }
 
-    // 2. Check API key
-    if (!GROQ_API_KEY) {
-      return res.status(500).json({
-        error: "Missing GROQ_API_KEY in environment variables"
-      });
-    }
+    console.log("KEY EXISTS:", !!GROQ_API_KEY);
 
-    // 3. Call Groq
     const response = await fetch(GROQ_URL, {
       method: "POST",
       headers: {
@@ -47,71 +37,64 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
         messages: [
           {
             role: "system",
-            content: "Turn the text into short clear bullet points."
+            content: "Turn text into bullet points."
           },
           {
             role: "user",
-            content: text.substring(0, 6000)
+            content: text.substring(0, 4000)
           }
         ],
         temperature: 0.3
       })
     });
 
-    // 🔥 FULL DEBUG RESPONSE (THIS IS THE IMPORTANT PART)
     const rawText = await response.text();
 
-    let dataAI;
-    try {
-      dataAI = JSON.parse(rawText);
-    } catch (err) {
-      console.log("❌ GROQ NON-JSON RESPONSE:");
-      console.log(rawText);
+    console.log("STATUS:", response.status);
+    console.log("RAW GROQ RESPONSE:", rawText);
 
+    let json;
+    try {
+      json = JSON.parse(rawText);
+    } catch (e) {
       return res.status(500).json({
-        error: "Groq returned non-JSON response",
+        error: "Groq did NOT return JSON",
         raw: rawText
       });
     }
 
-    // ❌ If Groq rejects request
     if (!response.ok) {
-      console.log("❌ GROQ ERROR RESPONSE:");
-      console.log(dataAI);
-
       return res.status(500).json({
-        error: "Groq request failed",
+        error: "Groq request failed (REAL ERROR BELOW)",
         status: response.status,
-        details: dataAI
+        details: json
       });
     }
 
-    const output = dataAI?.choices?.[0]?.message?.content;
+    const output = json?.choices?.[0]?.message?.content;
 
     if (!output) {
       return res.status(500).json({
-        error: "No AI output returned",
-        raw: dataAI
+        error: "No output from Groq",
+        raw: json
       });
     }
 
-    // 4. Convert to bullet points
     const bullets = output
       .split("\n")
-      .map(line => line.replace(/^[-•*]\s*/, "").trim())
+      .map(l => l.replace(/^[-•*]\s*/, "").trim())
       .filter(Boolean);
 
-    return res.json({ bullets });
+    res.json({ bullets });
 
   } catch (err) {
-    console.error("SERVER ERROR:", err);
-    return res.status(500).json({ error: err.message });
+    console.error("SERVER CRASH:", err);
+    res.status(500).json({ error: err.message });
   }
 });
 
-// 🚀 Render-safe port
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log("Server running on", PORT);
 });
