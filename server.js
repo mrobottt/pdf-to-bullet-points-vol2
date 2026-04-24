@@ -35,7 +35,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       });
     }
 
-    // 3. Call Groq API
+    // 3. Call Groq
     const response = await fetch(GROQ_URL, {
       method: "POST",
       headers: {
@@ -47,7 +47,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
         messages: [
           {
             role: "system",
-            content: "Convert text into clear bullet points."
+            content: "Turn the text into short clear bullet points."
           },
           {
             role: "user",
@@ -58,14 +58,15 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       })
     });
 
-    // 🔥 UPDATED DEBUG BLOCK (IMPORTANT)
+    // 🔥 FULL DEBUG RESPONSE (THIS IS THE IMPORTANT PART)
     const rawText = await response.text();
 
     let dataAI;
     try {
       dataAI = JSON.parse(rawText);
     } catch (err) {
-      console.log("GROQ NON-JSON RESPONSE:", rawText);
+      console.log("❌ GROQ NON-JSON RESPONSE:");
+      console.log(rawText);
 
       return res.status(500).json({
         error: "Groq returned non-JSON response",
@@ -73,8 +74,10 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       });
     }
 
+    // ❌ If Groq rejects request
     if (!response.ok) {
-      console.log("GROQ ERROR:", dataAI);
+      console.log("❌ GROQ ERROR RESPONSE:");
+      console.log(dataAI);
 
       return res.status(500).json({
         error: "Groq request failed",
@@ -102,11 +105,11 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
 
   } catch (err) {
     console.error("SERVER ERROR:", err);
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 });
 
-// 🚀 Render-compatible port
+// 🚀 Render-safe port
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
