@@ -75,12 +75,18 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
 
     // ❌ Groq error handling
     if (!response.ok) {
-      return res.status(500).json({
-        error: "Groq request failed",
-        status: response.status,
-        details: dataAI
-      });
-    }
+  const rawText = await response.text();
+
+  console.log("🔥 GROQ STATUS:", response.status);
+  console.log("🔥 GROQ RAW RESPONSE:");
+  console.log(rawText);
+
+  return res.status(500).json({
+    error: "Groq request failed",
+    status: response.status,
+    raw: rawText
+  });
+}
 
     const output = dataAI?.choices?.[0]?.message?.content;
 
