@@ -8,7 +8,7 @@ const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 app.use(cors());
 
-// 🔑 API KEY (must be set in Render environment variables)
+// 🔑 API KEY (Render env var)
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 // 🌍 Groq endpoint
@@ -46,7 +46,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
         messages: [
           {
             role: "system",
-            content: "Convert text into short, clear bullet points."
+            content: "Convert text into short clear bullet points."
           },
           {
             role: "user",
@@ -57,7 +57,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       })
     });
 
-    // 🔥 FIXED: read response ONCE only
+    // ✅ READ ONLY ONCE (FIXED)
     const rawText = await response.text();
 
     console.log("STATUS:", response.status);
@@ -73,20 +73,14 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
       });
     }
 
-    // ❌ Groq error handling
+    // ❌ Handle Groq errors
     if (!response.ok) {
-  const rawText = await response.text();
-
-  console.log("🔥 GROQ STATUS:", response.status);
-  console.log("🔥 GROQ RAW RESPONSE:");
-  console.log(rawText);
-
-  return res.status(500).json({
-    error: "Groq request failed",
-    status: response.status,
-    raw: rawText
-  });
-}
+      return res.status(500).json({
+        error: "Groq request failed",
+        status: response.status,
+        details: dataAI
+      });
+    }
 
     const output = dataAI?.choices?.[0]?.message?.content;
 
@@ -111,7 +105,7 @@ app.post("/upload", upload.single("pdf"), async (req, res) => {
   }
 });
 
-// 🚀 Render-safe port
+// 🚀 Render port
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
