@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <nav class="navbar">
+  <div class="nav-inner">
+    <div class="logo">oneAI</div>
+
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#price">Pricing</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <a href="#demo" class="nav-cta">Try Free</a>
+  </div>
+</nav>
+    
+    
+    
+    
+    
+    <h1 id="home">Welcome to oneAI</h1>
+    <p class="tagline">Use AI to turn long pdf's into small bullet points</p>
+    <section>
+       <div class="features1">
+         <div class="card"> <p class="features">Modern AI Application to save you time</p>
+              <p class="featur">
+                        Reliable AI <span class="feature">:Lorem ipsum dolor sit amet consectetur, Lorem ipsum dolor sit amet consectetur.</span>
+                    </p>
+                    <p id="demo" class="featur">
+                        Saves Time <span class="feature">:Lorem ipsum dolor sit amet consectetur, Lorem ipsum dolor sit amet consectetur.</span>
+                    </p>          
+                    
+
+
+        </div> <div class="card"> <img src="https://www.taskade.com/static_images/curations/convert/project-views.png" alt="">
+    </section>
+    <h2>Try Our Demo Version!!</h2>
+    <h4>Upload PDF(demo)</h4>
+
+     <div id="loading" class="loading">
+  Analyzing PDF...
+</div>
+
+    <div class="file-upload">
+    <input type="file" id="pdfUpload" accept=".pdf"
+    onchange="showBullets()"/>
+    <button id="price" onclick="document.getElementById('pdfUpload').click()">Upload</button>
+    </div>
+
+    <div id="bullet-points" class="fake-bullets">
+        <h3>Extracted Points:</h3>
+        <ul>
+            <li>Lorem ipsum dolor sit amet consectetur, Lorem ipsum dolor sit amet consectetur.</li>
+            <li>Lorem ipsum dolor sit amet consectetur, Lorem ipsum dolor sit amet consectetur.</li>
+            <li>Lorem ipsum dolor sit amet consectetur, Lorem ipsum dolor sit amet consectetur.</li>
+            <li>Lorem ipsum dolor sit amet consectetur, Lorem ipsum dolor sit amet consectetur.</li>
+            <li>Lorem ipsum dolor sit amet consectetur, Lorem ipsum dolor sit amet consectetur.</li>
+        </ul> </div>
+        <section>
+            <h4>Choose the right plan for you</h4>
+            <p class="tagline2">Choose an affordable plan that's packed with the features that align with your goals.</p>
+            <div class="pricing-container">
+                <div class="card">
+                    <p class="basic">Basic</p>
+                    <p class="price">
+                        $2.99 <span class="tagline-basic">/month</span>
+                    </p>
+                    <p class="description">Lorem ipsum dolor sit amet consectetur.</p>
+                    <ul>
+                        <li>Lorem ipsum dolor sit amet consectetur.</li>
+                        <li>Lorem ipsum dolor sit amet consectetur.</li>
+                        <li>Lorem ipsum dolor sit amet consectetur.</li>
+                      <br>  <button class="get-started">Get started today</button>
+                    </ul> </div> 
+                <div class="card">
+                    <p class="basic">Pro</p>
+                     <p class="price">
+                        $4.99 <span class="tagline-basic">/month</span>
+                     </p>
+    
+                    <p class="description">Lorem ipsum dolor sit amet consectetur.</p>
+                    <ul>
+                        <li>Lorem ipsum dolor sit amet consectetur.</li>
+                        <li>Lorem ipsum dolor sit amet consectetur.</li>
+                        <li>Lorem ipsum dolor sit amet consectetur.</li>
+                      <br>  <button class="get-started">Get started today</button>        
+                </div>
+                <div class="card">
+                    <p class="basic">Premium</p>
+                     <p class="price">
+                        $9.99 <span class="tagline-basic">/month</span>
+                     </p>
+    
+                    <p class="description">Lorem ipsum dolor sit amet consectetur.</p>
+                    <ul>
+                        <li>Lorem ipsum dolor sit amet consectetur.</li>
+                        <li>Lorem ipsum dolor sit amet consectetur.</li>
+                        <li>Lorem ipsum dolor sit amet consectetur.</li>
+                       <br> <button class="get-started">Get started today</button>        
+                </div>
+            </div>
+        </section>
+        <footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand">oneAI</p>
+
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="https://www.instagram.com/bnjfrhichem/">Contact</a>
+    </div>
+
+  <p id="contact" class="footer-copy">© 2026 oneAI. All rights reserved.</p>
+    </div>
+        </footer>
+        
+        
+    
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+body {
+  background: radial-gradient(circle at top, #0b1220, #070a12);
+  color: #e9eefc;
+  line-height: 1.6;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 16, 30, 0.6);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.nav-inner {
+  max-width: 1150px;
+  margin: auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #7c9cff, #5eead4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links a {
+  margin: 0 12px;
+  text-decoration: none;
+  color: #b7c3dd;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.nav-links a:hover {
+  color: white;
+}
+
+.nav-cta {
+  background: linear-gradient(135deg, #4f7cff, #6ee7ff);
+  color: #061021;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s;
+  box-shadow: 0 10px 30px rgba(79,124,255,0.25);
+}
+
+.nav-cta:hover {
+  transform: translateY(-1px);
+}
+
+/* ================= HERO ================= */
+h1 {
+  text-align: center;
+  margin-top: 80px;
+  font-size: 52px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.tagline {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 17px;
+  color: #b7c3dd;
+}
+
+/* ================= SECTION ================= */
+section {
+  max-width: 1150px;
+  margin: auto;
+  padding: 70px 24px;
+}
+
+/* ================= CARDS ================= */
+.features1,
+.pricing-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+  margin-top: 30px;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 22px;
+  transition: 0.25s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(110,231,255,0.35);
+  box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+}
+
+/* ================= FEATURE TEXT ================= */
+.features {
+  font-weight: 700;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.featur {
+  font-size: 14px;
+  color: #c6d0ea;
+  margin-bottom: 10px;
+}
+
+.feature {
+  color: #93a7c7;
+}
+
+/* ================= IMAGES ================= */
+.card img {
+  width: 100%;
+  border-radius: 14px;
+  margin-top: 10px;
+}
+
+/* ================= DEMO ================= */
+h2 {
+  text-align: center;
+  font-size: 30px;
+  margin-top: 50px;
+  font-weight: 800;
+}
+
+h4 {
+  text-align: center;
+  margin-top: 10px;
+  color: #a9b7d0;
+  font-weight: 400;
+}
+
+/* ================= UPLOAD ================= */
+.file-upload {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 25px 0;
+}
+
+.file-upload button {
+  background: linear-gradient(135deg, #4f7cff, #6ee7ff);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #061021;
+  box-shadow: 0 10px 30px rgba(79,124,255,0.25);
+  transition: 0.2s;
+}
+
+.file-upload button:hover {
+  transform: translateY(-2px);
+}
+
+/* ================= LOADING ================= */
+.loading {
+  display: none;
+  text-align: center;
+  margin: 25px auto;
+  font-size: 15px;
+  color: #a9b7d0;
+  position: relative;
+}
+
+.loading::after {
+  content: "";
+  display: inline-block;
+  margin-left: 6px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #6ee7ff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ================= BULLETS ================= */
+#bullet-points {
+  display: none;
+}
+
+.fake-bullets {
+  max-width: 750px;
+  margin: 25px auto;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 22px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.fake-bullets ul {
+  margin-top: 12px;
+  padding-left: 20px;
+  color: #cbd6ee;
+}
+
+/* ================= PRICING ================= */
+.basic {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.price {
+  font-size: 28px;
+  margin: 12px 0;
+}
+
+.tagline-basic {
+  font-size: 13px;
+  color: #93a7c7;
+}
+
+.description {
+  font-size: 14px;
+  color: #b7c3dd;
+  margin-bottom: 12px;
+}
+
+.card ul {
+  list-style: none;
+  font-size: 14px;
+  color: #cbd6ee;
+}
+
+.card li {
+  margin-bottom: 8px;
+}
+
+.get-started {
+  margin-top: 14px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  background: linear-gradient(135deg, #4f7cff, #6ee7ff);
+  color: #061021;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.get-started:hover {
+  transform: translateY(-2px);
+}
+
+/* ================= FOOTER ================= */
+.footer {
+  margin-top: 70px;
+  padding: 50px 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.2);
+}
+
+.footer-inner {
+  max-width: 1150px;
+  margin: auto;
+  text-align: center;
+}
+
+.footer-links a {
+  margin: 0 12px;
+  text-decoration: none;
+  color: #a9b7d0;
+  font-size: 14px;
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+.footer-copy {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #6f7f9c;
+}
+.tagline2 {
+    text-align: center;
+}
+
+
+.file-upload input[type="file"] {
+    display: none;
+}
