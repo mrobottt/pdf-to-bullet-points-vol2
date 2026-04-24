@@ -14,7 +14,7 @@ async function showBullets() {
   bullets.style.display = "none";
 
   try {
-    const res = await fetch("http://localhost:3000/upload", {
+    const res = await fetch("https://pdf-to-bullet-points-vol2.onrender.com//upload", {
       method: "POST",
       body: formData,
     });
